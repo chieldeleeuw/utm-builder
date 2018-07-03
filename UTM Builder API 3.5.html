@@ -1,0 +1,1848 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<meta name="viewport" content="width=device-width">
+<meta description="The #1 UTM builder and backlog tool on the entire web. Made by @chieldeleeuw">
+<link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+      <link rel="icon" href="images/favicon.png" type="image/gif" sizes="30x30">
+
+<meta property="og:title" content="The #1 UTM builder and backlog tool" />
+<meta property="og:url" content="www.chieldeleeuw.nl/tools/utm-builder" />
+<meta property="og:image" content="images/ogimage.jpg" />
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:creator" content="@chieldeleeuw" />
+<meta property="og:url" content="http://chieldeleeuw.nl/tools/utm-builder/" />
+<meta property="og:title" content="Simply build and backlog all your UTM's" />
+<meta property="og:description" content="The simplest UTM builder and backlog tool on the entire web. Made by @chieldeleeuw" />
+<meta property="og:image" content="images/ogimage.jpg" />
+
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-78690223-2"></script>
+<script>
+
+var utmSegment
+
+  //GA tracking
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-78690223-2');
+
+</script>
+
+<script>
+	//embed API Library
+(function(w,d,s,g,js,fs){
+  g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(f){this.q.push(f);}};
+  js=d.createElement(s);fs=d.getElementsByTagName(s)[0];
+  js.src='https://apis.google.com/js/platform.js';
+  fs.parentNode.insertBefore(js,fs);js.onload=function(){g.load('analytics');};
+}(window,document,'script'));
+</script>
+
+<!-- Hotjar Tracking Code for http://www.chieldeleeuw.nl -->
+<script>
+    (function(h,o,t,j,a,r){
+        h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+        h._hjSettings={hjid:932068,hjsv:6};
+        a=o.getElementsByTagName('head')[0];
+        r=o.createElement('script');r.async=1;
+        r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+        a.appendChild(r);
+    })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+</script>
+
+<script>
+
+//Write the dashboard code
+gapi.analytics.ready(function() {
+
+  /**
+   * Authorize the user immediately if the user has already granted access.
+   * If no access has been created, render an authorize button inside the
+   * element with the ID "embed-api-auth-container".
+   */
+  gapi.analytics.auth.authorize({
+    container: 'embed-api-auth-container',
+    clientid: '888690542654-e172s3lcdi76so163vq0tiifs95elv9j.apps.googleusercontent.com'
+  });
+
+
+  /**
+   * Create a new ViewSelector instance to be rendered inside of an
+   * element with the id "view-selector-container".
+   */
+  var viewSelector = new gapi.analytics.ViewSelector({
+    container: 'view-selector-container'
+  });
+
+  // Render the view selector to the page.
+  viewSelector.execute();
+
+
+  /**
+   * Create a new DataChart instance with the given query parameters
+   * and Google chart options. It will be rendered inside an element
+   * with the id "chart-container".
+   */
+  var dataChart = new gapi.analytics.googleCharts.DataChart({
+    
+	query: {
+      metrics: 'ga:sessions',
+      dimensions: 'ga:date',
+      'start-date': '30daysAgo',
+      'end-date': 'yesterday',
+      // segment: 'sessions::condition::ga:medium==' +analyticsMedium + ';condition::ga:source=='+ analyticsSource
+    },
+    chart: {
+      container: 'chart-container',
+      type: 'LINE',
+      options: {
+        width: '100%'
+      }
+    }
+  });
+
+
+  /**
+   * Render the dataChart on the page whenever a new view is selected.
+   */
+  viewSelector.on('change', function(ids) {
+    dataChart.set({query: {ids: ids}}).execute();
+  });
+
+});
+</script>
+
+
+<title>The #1 UTM Builder and Backlog</title>
+
+<!-- old primary color #009688, second #e91e63 -->
+<style>
+
+html body {
+	font-family: 'Open Sans', sans-serif;
+}
+
+.topnav {
+	display: block;
+	/*height: 50px;*/
+	min-height: 50px;
+	height:fit-content;
+	width: 100%;
+	background: #19b2d2;
+	color: #FFF;
+	z-index: 1;
+	position: sticky;
+	overflow: hidden;
+	top: 0;
+	text-align: center;
+	border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+}
+
+.topnav h1 {
+	margin: 5px;
+}
+
+.container {
+	display: inline-flex;
+	width: 100%;
+	background: #FFFFFF;
+	margin-top: 50px;
+	position: relative;
+}
+
+.yourInput {
+	box-shadow: 0 4px 10px 0 rgba(0,0,0,0.2), 0 4px 20px 0 rgba(0,0,0,0.19);
+	box-sizing: border-box;
+/*	float: left;*/
+	padding: 25px;
+	width: 30%;
+	min-width: 250px;
+	height: fit-content;
+	
+	position: sticky;
+	z-index: 0;
+	top: 74px;
+	left: 10px;
+	background: #FFF;
+	overflow-x: hidden;
+	border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+
+}
+
+.yourInput input {
+	display: block;
+	margin: 10px 0px 0px 0px;
+	text-align: left;
+	text-indent: 3px;
+	width: 100%;
+	font-size: 16px;
+	cursor: text;
+	border-width: 1px;
+	border-style: solid;
+	border-color: rgba(0,0,0,0.19);
+	padding: 6px;
+    border-radius: 3px;
+}
+
+.yourUTM {
+	width: 40%;
+	max-width
+	float: left;
+	margin-left: 30px;
+	margin-right: 30px;
+}
+
+#utmbutton {
+	background: #62AD61;
+	color: #FFFFFF;
+	width: 100%;
+	font-size: 22px;
+	cursor: pointer;
+}
+
+li {
+	list-style: none;
+	box-sizing: border-box;
+	box-shadow:  0 4px 10px 0 rgba(0,0,0,0.2), 0 4px 20px 0 rgba(0,0,0,0.19);
+	margin: 0 0 10px 10px;
+	padding: 14px 100px 14px 14px;	
+	min-height: 50px;
+	word-break:break-all;
+	/*width: 60%;*/
+	display: block;
+	position: relative;
+	border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+
+li .buttons { 
+	width: 100px;
+	height: 50px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin: auto;
+ }
+
+ li .buttons button {
+ 	width: 50px;
+ 	height: 50px;
+ 	float: left;
+ 	background: none;
+ 	position: relative;
+ 	border: 0px;
+ 	box-shadow: none;
+ 	outline: none;
+ 	cursor: pointer;
+ 	margin: auto, 0;
+
+ 	-webkit-appearance: none;
+	-moz-appearance: none;
+	-ms-appearance: none;
+	-o-appearance: none;
+	appearance: none;
+ }
+
+ li .buttons button:last-of-type:before {
+ 	content:'';
+ 	width: 1px;
+ 	height: 30px;
+ 	position: absolute;
+ 	top: 10px;
+ 	left: 0px;
+ 	background: #edf0f1;
+ }
+
+li .buttons button svg {
+	width: 22px;
+	height: 22px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: -11px 0 0 -11px;
+}
+
+ li .buttons button.copy svg {
+ 	background:;
+ 	border: 0px;
+ 	fill: #c0cecb;
+
+ 	-webkit-transition:background 0.2s ease;
+	-moz-transition:background 0.2s ease;
+	-o-transition:background 0.2s ease;
+	-ms-transition:background 0.2s ease;
+	transition:background 0.2s ease;
+ }
+
+ li .buttons button .fill {
+ 	-webkit-transition:fill 0.2s ease;
+	-moz-transition:fill 0.2s ease;
+	-ms-transition:fill 0.2s ease;
+	-o-transition:fill 0.2s ease;
+	transition:fill 0.2s ease;
+ }
+
+ li .buttons button.remove svg .fill {
+ 	fill: #c0cecb;
+ }
+
+ li .buttons button.remove:hover svg .fill {
+ 	fill: #e85656;
+ }
+
+li .buttons button.copy svg .fill {
+	fill: #333333;
+}
+
+li .buttons button.copy:hover svg {
+	fill: #25b99a;
+}
+
+li .buttons button.copy
+
+
+.UTMlist:empty:after {
+	content: "You have no UTM's in your backlog";
+	width: auto;
+	height: 1px;
+	background: #d8e5e0;
+	position: absolute;
+	top: 200px;
+	left: 50px;
+	margin: 0 0 0 50%;
+	color: rgba(0, 0, 0, 0.5)
+}
+
+#generateUTM:empty:after {
+	content: "You have no UTM's in your Backlog";
+	font-size: 22px;
+	padding-top: 100px;
+	width: auto;
+	max-width: 350px;
+	text-align: -webkit-center;
+	position: absolute;
+	top: 200px;
+	left: 50px;
+	margin: 0 0 0 50%;
+	color: rgba(0, 0, 0, 0.2)
+}
+
+.noFill {
+	fill: none;
+}
+
+.textnote {
+	color: rgb(3,3,3,0.5);
+	margin-top: 0px;
+	top: 2px;
+	text-indent: 3px;
+}
+
+.utmtitle {
+    /*margin-top: 70px;*/
+    margin-left: 10px;
+    color: rgba(3,3,3,0.5);
+}
+
+.activeFilter {
+	font-size: 16px;
+	box-sizing: border-box;
+	background: #62AD61 !important;
+	color: #ffffff !important;
+	cursor: pointer;
+	border-color: #62AD61;
+}
+
+.sortutm {
+	font-size: 16px;
+	box-sizing: border-box;
+	background: transparent;
+	color: rgba(0,0,0,0.2);
+	cursor: pointer;
+	margin-right: 10px;
+	border-top-right-radius: 15px;
+	border-bottom-right-radius: 15px;
+	border-top-left-radius: 15px;
+	border-bottom-left-radius: 15px;
+}
+
+/*#sortcampaign {
+	margin-right: 10px;
+	border-top-right-radius: 15px;
+	border-bottom-right-radius: 15px;
+	border-top-left-radius: 15px;
+	border-bottom-left-radius: 15px;
+}*/
+
+#toggle {
+	text-align: center;
+	color: rgba(0,0,0,0.4);
+	font-size: 18px;
+	cursor: pointer;
+}
+
+.madeby {
+	text-align: center;
+	color: rgba(0,0,0,0.7);
+	font-size: 18px;
+	cursor: pointer;
+}
+
+.madeby a {
+	
+	color: rgb(25,178,210,0.7);
+	text-decoration: underline;
+}
+
+#launchbuilder {
+	display: none;
+}
+
+.clearfilter {
+	color: rgba(3,3,3,0.5);
+	cursor: pointer;
+	text-indent: 10px;
+}
+
+/*#buildnewutm {
+	display: none;
+}*/
+
+.filterCampaignItem {
+	
+	display: none !important;
+}
+
+.typeFilter {
+	display: block;
+	margin: 10px 0px 0px 0px;
+	text-align: left;
+	text-indent: 3px;
+	width: 100%;
+	font-size: 16px;
+	cursor: text;
+	border-width: 1px;
+	border-style: solid;
+	border-color: rgba(0,0,0,0.19);
+	padding: 6px;
+    border-radius: 3px;
+    animation-direction: normal;
+	animation-duration: 3s;
+	animation-timing-function: ease;
+
+}
+
+.filter {
+	margin-left: 10px;
+	margin-right: 10px;
+	width: 80%;
+}
+
+.filterheader {
+	color: rgba(3,3,3,0.5);
+	width: 90%;
+
+}
+
+.openclosefilter {
+	display: none;
+
+}
+
+#closeicon {
+	font-size: 22px;
+	color: rgba(3,3,3,0.5);
+
+}
+
+.showicon {
+	display: block;
+}
+
+.plusutm {
+	position: fixed;
+	border-radius: 50%;
+	display: flex;
+	top: 80%;
+	left: 80%;
+	color: white;
+	background-color: #62AD61;
+	width: 25px;
+	text-align: center;
+	cursor: pointer;
+
+}
+
+.copiedtext {
+	/*border-color: #62AD61 !important;*/
+	content: 'Copied';
+	padding-right: 20px;
+/*	border-width: 2px;
+	border-style: solid;*/
+	animation-timing-function: ease-in;
+	transition: 0.2s;
+	box-shadow: 0 0 1rem #62AD61;
+	border-color: #62AD61;
+	transform: scale(1.1);
+}
+
+.yourInput p {
+	font-size: 12px;
+}
+
+.detaildiv {
+	display: inline-flex;
+}
+
+.detailbutton {
+	background-color: transparent;
+	border-style: solid;
+	border-color: rgba(3,3,3,0.2);
+	border-width: 2px;
+	border-radius: 3px;
+	margin-right: 10px;
+	font-size: 12px;
+	color: rgba(3,3,3,0.6);
+
+}
+
+.detailstats {
+	background-color: transparent;
+	border-style: solid;
+	border-color: rgba(3,3,3,0.2);
+	border-width: 2px;
+	border-radius: 3px;
+	margin-right: 10px;
+	font-size: 16px;
+	height: auto;
+	color: rgba(3,3,3,0.6);
+	fill: rgba(3,3,3,0.6);
+	cursor: pointer;
+	padding: 2px 2px;
+}
+
+.detailstats:hover {
+	background-color: rgba(3,3,3,0.6);
+	border-color: #fff;
+	color: #fff;
+	fill: #fff;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: 17px;
+}
+
+.switch input {display:none;}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 13px;
+  width: 13px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #19B2D2;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(13px);
+  -ms-transform: translateX(13px);
+  transform: translateX(13px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.cleartoggle {
+	display: inline-flex;
+}
+
+.cleartoggletext {
+	margin-top: 0px;
+	text-align: center;
+	color: rgba(0,0,0,0.7);
+	font-size: 17px;
+	margin-right: 15px;
+}
+
+.stats {
+	width: 100%;
+	display: inline-flex;
+	float: left;
+}
+
+.progress {
+	width: 50%;
+	padding: 25px;
+	text-align: center;
+	color: rgb(3,3,3,0.5);
+	padding-top: 0px;
+}
+
+.export {
+	width: 50%;
+	padding: 25px;
+	text-align: center;
+	color: rgb(3,3,3,0.5);
+	padding-top: 0px;
+}
+
+#downloadUTM {
+	/*background: transparent;*/
+	cursor: pointer;
+	border: none;
+	/*color: rgb(3,3,3,0.5);*/
+}
+
+#downloadUTM {
+	color: #009688;
+}
+
+#downloadUTM svg {
+	fill: #c0cecb;
+	 	-webkit-transition:fill 0.2s ease;
+	-moz-transition:fill 0.2s ease;
+	-ms-transition:fill 0.2s ease;
+	-o-transition:fill 0.2s ease;
+	transition:fill 0.2s ease;
+}
+
+#downloadUTM:hover svg {
+	fill: #62AD61;
+	content: "Export to CSV";
+
+	font-size: 22px;
+    /* padding-top: 700px; */
+    width: fit-content;
+    /* max-width: 350px; */
+    /* text-align: -webkit-center; */
+    /*position: inherit;*/
+    /*top: 30px;*/
+    /* left: 50px; */
+    margin: auto auto;
+    color: rgba(0, 0, 0, 0.2);
+}
+
+/* Tooltip container */
+.tooltip {
+    position: relative;
+    display: inline-block;
+   /* border-bottom: 1px dotted black;  If you want dots under the hoverable text */
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: fit-content;
+    text-indent: 3px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    padding: 5px 5px;
+    border-radius: 6px;
+    font-family: 'Open Sans';
+    text-transform: lowercase;
+    font-size: 12px;
+
+    /* Position the tooltip text */
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -42px;
+
+    /* Fade in tooltip */
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+/* Tooltip arrow */
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+.textdivutm {
+	padding-bottom: 10px;
+}
+
+@media screen and (max-width: 933px) {
+
+.filter {
+	width: 100%;
+}
+
+.typefilter {
+	width: 90%;
+	margin-right: 10px;
+}
+
+.filterheader{
+	width: 100%;
+
+}
+.yourInput {
+    box-shadow: 0 4px 10px 0 rgba(0,0,0,0.2), 0 4px 20px 0 rgba(0,0,0,0.19);
+    box-sizing: border-box;
+ 	float: none;
+    padding: 25px;
+    width: 100%;
+    min-width: 250px;
+    max-width: 100%;
+    height: fit-content;
+    position: unset;
+    z-index: 1;
+    top: 74px;
+    left: 10px;
+    background: #FFF;
+    overflow-x: hidden;
+}
+.yourUTM {
+    width: auto;
+    /* float: left; */
+    margin: 20px 30px 20px 20px;
+    min-height: -webkit-fill-available;
+}
+
+	.container {
+    display: block;
+    width: 100%;
+    background: #FFFFFF;
+    margin-top: 15px;
+    position: relative;
+}
+
+	.utmtitle {
+		margin-top: 30px;
+	}
+
+.UTMlist:empty:after {
+    content: "You have no UTM's in your Backlog";
+    font-size: 22px;
+    /* padding-top: 700px; */
+    width: auto;
+    /* max-width: 350px; */
+    /* text-align: -webkit-center; */
+    position: inherit;
+    top: 30px;
+    /* left: 50px; */
+    margin: auto auto;
+    color: rgba(0, 0, 0, 0.2);
+}
+
+#generateUTM:empty:after {
+    content: "You have no UTM's in your Backlog";
+    font-size: 22px;
+    /* padding-top: 700px; */
+    width: auto;
+    /* max-width: 350px; */
+    /* text-align: -webkit-center; */
+    position: inherit;
+    top: 30px;
+    /* left: 50px; */
+    margin: auto auto;
+    color: rgba(0, 0, 0, 0.2);
+}
+
+.utmListItem {
+	width: 90% !important;
+}
+
+}
+</style>
+
+
+</head>
+
+
+<body style="display: block">
+
+	<div class="topnav">
+		<div class="title">
+			<h1>UTM Builder and Backlog</h1>
+		</div>	
+	</div>
+
+	<div class="container">	
+
+		<div class="plusutm" id="launchbuilder">
+			<a href="#" class="float">
+				
+			</a>
+
+			<i id="buildnewutm" class="fa fa-plus my-float"></i>
+		</div>
+
+		<div class="yourInput" id="buildermenu">
+			<h2>Build you UTM links here</h2>
+			<input onkeyup='checkDuplicate()' type="text" placeholder="URL" class="utmInput" id="url" />
+			<p class="textnote">URL: e.g. "www.instantmagazine.com"</p> 
+			
+			<input onkeyup='checkDuplicate()' type="select" id="utmsource" class="utmInput" placeholder="Source">
+			<p class="textnote">Source: e.g. "google", "facebook" or "gmail </p>
+			
+			<input onkeyup='checkDuplicate()' type="select" id="utmmedium" class="utmInput" placeholder="Medium">
+			<p class="textnote">Medium: e.g. "email", "paid search" or social</p>
+				
+			<input onkeyup='checkDuplicate()' type="select" id="utmcampaign" class="utmInput" placeholder="Campaign">
+			<p class="textnote">Campaign: e.g. "newsletter-april", "event-magazine" "whitepaper"</p>
+
+			<input onkeyup='checkDuplicate()' type="select" id="utmterm" class="utmInput" placeholder="Term">
+			<p class="textnote">Term: e.g. "keyword", "target audience" or "email-list"</p>
+
+			<input onkeyup='checkDuplicate()' type="select" id="utmcontent" class="utmInput" placeholder="Content">
+			<p class="textnote">Content: e.g. "banner-type"</p>
+
+			<div class="cleartoggle" style="display: inline-flex">
+
+				<p class="cleartoggletext">Clear all fields after building UTM</p>
+
+				<label class="switch">
+
+					  <input type="checkbox" id="clearfieldtoggle" unchecked>
+					  <span class="slider round"></span>
+				</label>
+			</div>
+
+			<!-- <button id="downloadUTM">Export UTM's to CSV</button> -->
+
+			<button type="button" id="utmbutton">Build UTM</button>
+			<p class="madeby">Made by <a href="https://www.linkedin.com/in/chiel-de-leeuw/"> Chiel de Leeuw</a> </p>	
+			<p class="toggle" id="toggle">hide</p>
+
+						<div class="filter">
+				<div id="embed-api-auth-container"></div>
+				<div id="chart-container"></div>
+				<div id="view-selector-container"></div>
+			</div>
+
+
+		</div>
+
+		<div class="yourUTM">
+
+			<div class="stats">
+
+				<div class="progress">
+					<h3> UTM's Created: <h3> 
+						<p id='counter'>0</p> 
+				</div>
+
+				<div class="export">
+					<h3>Export to CSV</h3>
+					<button id='downloadUTM' class='tooltip'>
+						<!-- <img src="/images/download.png"> -->
+
+
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+				    <path d="M0 0h24v24H0z" fill="none"/>
+				    <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/>
+
+				</svg>
+						<span class="tooltiptext">Export all UTM's to CSV</span>		
+					</button>
+
+			</div>
+
+
+		</div>
+
+
+
+
+
+				<div class="filter" id="filtercampaign">
+				<!-- <button style="display: none;" class="sortutm" id="sortcampaign">+</button> -->
+
+				<div class="filterheader" style="display: inline-flex;" >
+					<h3>Filter</h3>
+				
+
+				<div class="closefilter" id="openclose" style="margin-left: 80%; font-size: 22px">
+					<p id="closeicon" style="font-size: 22px; cursor: pointer;"><i class="fa fa-navicon"></i></p>
+			
+				</div>
+				</div>
+
+				<div id='filter' class="typefilter openclosefilter">
+
+					<input type="text" oninput="urlTypeFilter('url')" id="urlTypeFilter"  class="typeFilter" placeholder="url">
+					
+					<input type="text" oninput="sourceTypeFilter('source')" id="sourceTypeFilter" class="typeFilter" placeholder="source">
+					<input type="text" oninput="mediumTypeFilter('medium')" id="mediumTypeFilter" class="typeFilter" placeholder="medium">
+
+					<input type="text" oninput="betterTypeFilter('campaign')" id="campaignTypeFilter" class="typeFilter" placeholder="campaign">
+					<p class="clearfilter" id="clearfilter">clear</p>
+					
+					<!-- <input type="text" oninput="termTypeFilter('term')" id="termTypeFilter" placeholder="term">
+					<input type="text" oninput="contentTypeFilter('content')" id="contentTypeFilter" placeholder="content"> -->
+
+				</div>
+
+
+				</div>
+
+			<h2 class="utmtitle">UTM Backlog</h2>
+			<p class="UTMlist" id="generateUTM"></p>
+		</div>
+
+
+	</div>
+
+</body>
+
+<script> 
+
+// var data = (localStorage.getItem('utms')) ? JSON.parse(localStorage.getItem('utms')):{
+// 	utmList: []
+// };
+
+// var dataFilter = (localStorage.getItem('campaignFilters')) ? JSON.parse(localStorage.getItem('campaignFilters')): {
+// 	campaigns: []
+// };
+
+var data = (localStorage.getItem('utms')) ? JSON.parse(localStorage.getItem('utms')): {
+	utmList: []
+};
+
+//Retrieve local storage for the filter campaigns object --> uncomment if ever needed again
+var filter = (localStorage.getItem('campaigns')) ? JSON.parse(localStorage.getItem('campaigns')): {
+	campaignList: []
+};
+
+var analyticsSource;
+
+var analyticsMedium;
+
+var analyticsCampaign;
+
+document.getElementById('clearfilter').addEventListener('click', clearFilter);
+
+function utm(url, source, medium, campaign, term, content, fullUTM) {
+	this.url = url;
+	this.source = source;
+	this.medium = medium;
+	this.campaign = campaign;
+	this.term = term;
+	this.content = content;
+	this.fullUTM = fullUTM;
+}
+
+var removeSVG = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 22 22" style="enable-background:new 0 0 22 22;" xml:space="preserve"><rect class="noFill" width="22" heigth="22"/><g><g><path class="fill" d="M16.1,3.6h-1.9V3.3c0-1.3-1-2.3-2.3-2.3h-1.7C8.9,1,7.8,2,7.8,3.3v0.2H5.9c-1.3,0-2.3,1-2.3,2.3v1.3c0,0.5,0.4,0.9,0.9,1v10.5c0,1.3,1,2.3,2.3,2.3h8.5c1.3,0,2.3-1,2.3-2.3V8.2c0.5-0.1,0.9-0.5,0.9-1V5.9C18.4,4.6,17.4,3.6,16.1,3.6z M9.1,3.3c0-0.6,0.5-1.1,1.1-1.1h1.7c0.6,0,1.1,0.5,1.1,1.1v0.2H9.1V3.3z M16.3,18.7c0,0.6-0.5,1.1-1.1,1.1H6.7c-0.6,0-1.1-0.5-1.1-1.1V8.2h10.6L16.3,18.7L16.3,18.7z M17.2,7H4.8V5.9c0-0.6,0.5-1.1,1.1-1.1h10.2c0.6,0,1.1,0.5,1.1,1.1V7z"/></g><g><g><path class="fill" d="M11,18c-0.4,0-0.6-0.3-0.6-0.6v-6.8c0-0.4,0.3-0.6,0.6-0.6s0.6,0.3,0.6,0.6v6.8C11.6,17.7,11.4,18,11,18z"/></g><g><path class="fill" d="M8,18c-0.4,0-0.6-0.3-0.6-0.6v-6.8C7.4,10.2,7.7,10,8,10c0.4,0,0.6,0.3,0.6,0.6v6.8C8.7,17.7,8.4,18,8,18z"/></g><g><path class="fill" d="M14,18c-0.4,0-0.6-0.3-0.6-0.6v-6.8c0-0.4,0.3-0.6,0.6-0.6c0.4,0,0.6,0.3,0.6,0.6v6.8C14.6,17.7,14.3,18,14,18z"/></g></g></g></svg>';
+
+var copySVG = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="24px"height="24px" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve"><g id="Bounding_Boxes"><g id="ui_x5F_spec_x5F_header_copy_3" display="none"></g><path fill="none" d="M0,0h24v24H0V0z"/> </g><g id="Outline"><g id="ui_x5F_spec_x5F_header" display="none"></g> <g><path d="M16,1H4C2.9,1,2,1.9,2,3v14h2V3h12V1z"/><path d="M15,5H8C6.9,5,6.01,5.9,6.01,7L6,21c0,1.1,0.89,2,1.99,2H19c1.1,0,2-0.9,2-2V11L15,5z M8,21V7h6v5h5v9L8,21z"/> </g> </g> </svg>'
+
+
+renderUTMS();
+addClick();
+
+	
+	document.getElementById('url').addEventListener('keydown', function(e) {
+	//var value = this.value;
+	//console.log(e);
+	if (e.key === 'Enter') {
+		utmParent();
+	}
+})
+
+	document.getElementById('utmsource').addEventListener('keydown', function(e) {
+
+	if (e.key === 'Enter') {
+		utmParent();
+	}
+})
+
+	document.getElementById('utmmedium').addEventListener('keydown', function(e) {
+
+	if (e.key === 'Enter') {
+		utmParent();
+	}
+})
+
+	document.getElementById('utmcampaign').addEventListener('keydown', function(e) {
+
+	if (e.key === 'Enter') {
+		utmParent();
+	}
+})
+
+	document.getElementById('utmterm').addEventListener('keydown', function(e) {
+
+	if (e.key === 'Enter') {
+		utmParent();
+	}
+})
+
+	document.getElementById('utmcontent').addEventListener('keydown', function(e) {
+
+	if (e.key === 'Enter') {
+		utmParent();
+	}
+})
+
+
+	function addClick() {
+	document.getElementById('utmbutton').addEventListener('click', function () {
+		utmParent();
+	})
+};
+
+	function utmParent() {		
+		var url = document.getElementById('url').value;
+		//console.log(escape(url));
+		var source = escape(document.getElementById('utmsource').value);
+		//console.log(source);
+		var medium = escape(document.getElementById('utmmedium').value);
+		//console.log(medium);
+		var campaign = escape(document.getElementById('utmcampaign').value);
+		//console.log(campaign);
+		var term = escape(document.getElementById('utmterm').value);
+		//console.log(term);
+		var content = escape(document.getElementById('utmcontent').value);
+	//console.log(content);
+	//var value = document.getElementById('item').value;
+	//if(value) {
+	
+	switch (true) {
+		//everything is filled in
+		case term.length !== 0 && content.length !== 0:
+
+			var utmName = url + "?utm_source=" + source + "&utm_medium=" + medium + "&utm_campaign=" + campaign + "&utm_term=" + term + "&utm_content=" + content;
+
+			break;
+			//term is filled in. content is not filled in.
+		case term.length !== 0 && content.length === 0:	
+			var utmName = url + "?utm_source=" + source + "&utm_medium=" + medium + "&utm_campaign=" + campaign + "&utm_term=" + term;
+			break;	
+			//term is not filled in. content is filled in
+		case term.length === 0 && content.length !== 0:	
+			var utmName = url + "?utm_source=" + source + "&utm_medium=" + medium + "&utm_campaign=" + campaign + "&utm_content=" + content;
+			break;
+			//content en term are both empty
+		case term.length === 0 && content.length === 0:		
+			var utmName = url + "?utm_source=" + source + "&utm_medium=" + medium + "&utm_campaign=" + campaign;
+			break;
+	}
+
+	/*var utmName = url + "?utm_source=" + source + "&utm_medium=" + medium + "&utm_campaign=" + campaign + "&utm_term=" + term + "&utm_content=" + content;*/
+
+
+	switch(true) {
+		case url.length === 0 || source.length === 0 || medium.length === 0 || campaign.length === 0:
+		alert('Url, source, medium and campaign are required fields');
+		break;
+		case url.length > 0 && source.length > 0 && medium.length > 0:
+		
+		var utmNaming = new utm(url, source, medium, campaign, term, content, utmName);
+		//console.log(utmNaming.source);
+
+		addUTM(utmNaming);
+		//addCampaignFilter(utmNaming);
+		
+
+		
+		default:
+		//update object & localStorage
+	}
+};
+	function addCampaignFilter(value) {
+
+				var value = this.value;
+				var list = document.getElementById('filtercampaign');
+	
+				var id = value.campaign;
+				//console.log('wow look at this id ' + id);
+							//console.log('this is the best id: ' + button.className);
+							
+				var li = list.querySelectorAll('button.sortutm');
+							//console.log(li);
+
+							//create button element with ID
+							var button = document.createElement('button');
+								button.innerText = value.campaign;
+								button.classList.add('sortutm');
+								button.id = value.campaign;
+
+							//console.log(value.campaign)
+								
+							//add eventlistener to add class name for active filter style
+							button.addEventListener('click', function() {
+							var id = this.id;
+							var className = this.className;
+							typeFilter(this.innerText);
+							//console.log(this.innerText + 'lachuh')
+							
+							//console.log(id + ' look ath this id');
+							document.getElementById(id).classList.toggle("activeFilter");
+							// });
+
+							if(document.getElementById(id).className !== 'activeFilter') {
+								//console.log('filter is not active')
+								var url = document.getElementById('campaignTypeFilter');
+								url.value = "";
+								typeFilter("");
+							} else {
+								//console.log('filter is active');
+							
+							
+								var url = document.getElementById('campaignTypeFilter');
+								//url.value = id;
+								typeFilter("bar");
+								//console.log('testin event listeners');
+							
+							
+
+						};
+							
+							
+					});
+					
+				list.insertBefore(button, list.childNodes[0]);
+
+	 		};
+
+	
+
+	function addUTM(value) {
+		this.value = value;
+		//this.campaign = campaign;
+
+		//ga('send', 'event', 'UTM', 'Create', '');
+
+		addToDom(value);
+		//empty all input fields
+		
+		var clearToggle = document.getElementById('clearfieldtoggle').checked;
+
+		if(clearToggle === true) {
+			emptyAll();
+		}
+
+		
+		//Adds new UTM to data object
+		//data.innerData.utmList.push(value);
+
+		data.utmList.push(value);
+		
+
+		// if (filter.campaignList.length !== 0) {
+
+		// 	for (var i = 0; i < filter.campaignList.length; i++) {
+		// 		var check = filter.campaignList[i];
+								
+		// 		console.log('this is a check ' + check);
+						
+		// 			if(check == value.campaign) { 
+		// 			console.log(check + ' already exists');
+					
+		// 			} else {
+			var campaignPush = unescape(value.campaign);
+
+						//push campaigns to filter object. 
+						//filter.campaignList.push(unescape(value.campaign));
+						//addCampaignFilter(value);
+			// 		}
+			// 	}
+			// } else {
+				//filter.campaignList.push(value.campaign);
+				//addCampaignFilter(value);
+
+			// }
+			updateCounter()
+		dataObjectUpdated();
+
+	}
+
+	function addToDom(value) {
+		this.value = value;
+		//this.value.campaign = campaign;
+		//console.log('this is the campaign: ' + value.campaign);
+
+		var list = document.getElementById('generateUTM');
+
+		var item = document.createElement('li');
+		var textDiv = document.createElement('div')
+		textDiv.classList.add('textdivutm');
+		textDiv.innerText = value.fullUTM;
+		item.id = unescape(value.campaign);
+		item.classList.add('utmListItem');
+		item.dataset.url = unescape(value.url);
+		item.dataset.source = unescape(value.source);
+		item.dataset.medium = unescape(value.medium);
+		item.dataset.campaign = unescape(value.campaign);
+		item.dataset.term = unescape(value.term);
+		item.dataset.content = unescape(value.content);
+
+		var buttons = document.createElement('div');
+		buttons.classList.add('buttons');
+
+		var remove = document.createElement('button');
+		remove.classList.add('remove');
+		// add SVG here 
+		remove.innerHTML = removeSVG;
+		remove.addEventListener('click', removeItem);
+
+		var copy = document.createElement('button');
+		copy.classList.add('copy', 'tooltip');
+		// add SVG here 
+		copy.innerHTML = copySVG;
+		copy.addEventListener('click', copyItem);
+
+		var detailDiv = document.createElement('div');
+		detailDiv.classList.add('detaildiv');
+		// var detailUrl = document.createElement('button');
+		// detailUrl.innerText = unescape(value.url);
+		// detailUrl.classList.add('detailbutton');
+
+		var detailSM = document.createElement('button');
+		detailSM.innerText = unescape(value.source) + '/' + unescape(value.medium);
+		detailSM.classList.add('detailbutton');
+
+		var detailCampaign = document.createElement('button');
+		detailCampaign.innerText = unescape(value.campaign);
+		detailCampaign.classList.add('detailbutton');
+
+		var detailStats = document.createElement('icon');
+		detailStats.innerText = 'cached';
+		detailStats.classList.add('material-icons', 'detailstats', 'tooltip');
+		detailStats.id = 'utmStats';
+		
+		//Reuse this UTM code --> fill in utm fields based on this UTM
+		detailStats.addEventListener('click', function() {
+			 console.log('this works ' + this.parentNode.parentNode.dataset.source)
+			var url = document.getElementById('url');
+			var source = document.getElementById('utmsource');
+			var medium = document.getElementById('utmmedium');
+			var campaign = document.getElementById('utmcampaign');
+			var term = document.getElementById('utmterm');
+			var content = document.getElementById('utmcontent');
+
+			//set values in the utm builder fields
+			url.value = this.parentNode.parentNode.dataset.url;
+			source.value = this.parentNode.parentNode.dataset.source;
+			medium.value = this.parentNode.parentNode.dataset.medium;
+			campaign.value = this.parentNode.parentNode.dataset.campaign;
+			term.value = this.parentNode.parentNode.dataset.term;
+			content.value = this.parentNode.parentNode.dataset.content;
+		});
+
+
+		var statsTooltip = document.createElement('span');
+		statsTooltip.classList.add('tooltiptext');
+		statsTooltip.innerText = "REUSE THIS UTM";
+
+		var copyTooltip = document.createElement('span');
+		copyTooltip.classList.add('tooltiptext');
+		copyTooltip.innerText = "COPY UTM";
+
+
+		detailSM.addEventListener('click', function() {
+			 console.log('this works ' + this.parentNode.parentNode.dataset.source)
+			analyticsSource = this.parentNode.parentNode.dataset.source;
+			analyticsMedium = this.parentNode.parentNode.dataset.medium;
+			analyticsCampaign = this.parentNode.parentNode.dataset.campaign;
+		});
+
+
+		buttons.appendChild(remove);
+		buttons.appendChild(copy);
+		item.appendChild(buttons);
+		item.appendChild(detailDiv);
+		// detailDiv.appendChild(detailUrl);
+		detailDiv.appendChild(detailSM);
+		detailDiv.appendChild(detailCampaign);
+
+		detailStats.appendChild(statsTooltip);
+		copy.appendChild(copyTooltip);
+
+
+		//textDiv.appendChild(detailUrl);
+
+		list.insertBefore(item, list.childNodes[0]);
+		item.insertBefore(textDiv, item.childNodes[0])
+		// detailDiv.insertBefore(detailUrl, detailDiv.childNodes[0])
+		detailDiv.insertBefore(detailSM, detailDiv.childNodes[0])
+		detailDiv.insertBefore(detailCampaign, detailDiv.childNodes[1])
+		detailDiv.insertBefore(detailStats, detailDiv.childNodes[2])
+	}
+
+	function emptyAll() {
+		document.getElementById('url').value = '';
+		document.getElementById('utmsource').value = '';
+		document.getElementById('utmmedium').value = '';
+		document.getElementById('utmcampaign').value = '';
+		document.getElementById('utmterm').value = '';
+		document.getElementById('utmcontent').value = '';
+	}
+
+	function dataObjectUpdated() {
+		localStorage.setItem('utms', JSON.stringify(data));
+		
+		//push filter object to local storage under item campaigns
+		//localStorage.setItem('campaigns', JSON.stringify(filter));
+	}
+
+	function removeItem() {
+		var item = this.parentNode.parentNode;
+		var parent = item.parentNode;
+		var id = parent.id;
+		var value = item.innerText;
+
+		data.utmList.splice(data.utmList.indexOf(value), 1);
+
+		updateCounter()
+
+		dataObjectUpdated();
+
+		parent.removeChild(item);
+
+	}
+
+	function copyItem () {
+		var textcopy = this.parentNode.parentNode.childNodes[0].innerText;
+		var textID = this.parentNode.parentNode.className;
+		var id = this.parentNode.parentNode.id;
+		var textCopyString = textcopy.toString();
+		//console.log(id);
+		//console.log(textcopy);
+		
+		var dummyContent = textCopyString;
+ 		var dummy = document.createElement('textarea')
+ 		dummy.value = (dummyContent);
+ 	 	document.body.appendChild(dummy);
+
+ 		dummy.select();
+ 		document.execCommand('copy');
+
+
+		//document.textID.select(textCopyString);
+		//document.execCommand("copy");
+		// textcopy.select();
+
+		document.getElementById(this.parentNode.parentNode.id).classList.add('copiedtext');
+		//document.getElementById(this.parentNode.parentNode.id)addEventListener("click", deleteCopiedText);
+		//alert("copied the text: " + textcopy);
+		document.body.removeChild(dummy);
+
+		// setTimeout(deleteCopiedText,2000);
+		document.getElementById(id).addEventListener("transitionend", deleteCopiedText);
+
+		
+}
+
+
+		
+		function deleteCopiedText(e) {
+			var id = this.id;
+		
+			document.getElementById(id).classList.remove('copiedtext');
+			//document.querySelectorAll(this.Id).classList.remove('copiedtext');
+
+			// var x = document.getElementById();
+			// console.log(x)
+	}
+
+	function renderUTMS() {
+		if (!data.utmList.length) return;
+
+		for (var i = 0; i < data.utmList.length; i++) {
+			var value = data.utmList[i];
+			updateCounter()
+			addToDom(value);
+
+		}
+
+		if (filter.campaignList.length === 0) {
+			
+		} else {
+
+		for (var i = 0; i < filter.campaignList.length; i++) {
+			var value = filter.campaignList[i];
+
+			//addCampaignFilter(value);
+			//console.log('this is the filter list '+ value);
+			//console.log('renderUTMS function gives this value: ' + value.campaign)
+			}
+		} 
+	
+	}; 
+
+	function typeFilter() {
+	//	console.log(value + ' typeFilter value')
+		//var activeFilter = this.value.campaign;
+		var list = document.getElementById('generateUTM');
+		var li = list.querySelectorAll('li.utmListItem');
+
+		//var url = document.getElementById('campaignTypeFilter').value;
+		var url = document.getElementById('campaignTypeFilter');
+		//url.value = value;
+		//document.getElementById('campaignTypeFilter').value = activeFilter;
+		//console.log(url + ' double check filter');
+							
+		//console.log('this is the list ' + url);
+
+			for (var i = 0; i < li.length; i++) {
+				var value = li[i].id;
+				//console.log(value);
+				
+				//console.log(id);
+					if(value !== url.value) {
+						//var value = this.value;
+					li[i].classList.add("filterCampaignItem");
+					//document.getElementById(value).classList.add("filterCampaignItem");
+								} else {
+									//var value = this.value;
+									li[i].classList.remove("filterCampaignItem");
+									//document.getElementById(this.value).classList.remove("filterCampaignItem");
+
+								}
+								if(url.value === "") {
+									li[i].classList.remove("filterCampaignItem");
+								}
+
+	}
+}
+
+
+function betterTypeFilter(value) {
+	var type = this.value;
+	//console.log(type) 
+	var input = document.getElementById('campaignTypeFilter');
+	var filter = input.value.toUpperCase();
+	var list = document.getElementById('generateUTM');
+	var li = list.querySelectorAll('li.utmListItem');
+	var td
+
+	for (i = 0; i < li.length; i++) {
+		td = li[i].dataset.campaign;
+		//console.log(td);
+
+		if (td) {
+			if (td.toUpperCase().indexOf(filter) > -1) {
+				li[i].style.display = "";
+			} else {
+				li[i].style.display = "none"
+			}
+		}	
+	}
+
+}
+
+
+
+function sourceTypeFilter(value) {
+	var type = value;
+	//console.log(type) 
+	var input = document.getElementById('sourceTypeFilter');
+	var filter = input.value.toUpperCase();
+	var list = document.getElementById('generateUTM');
+	var li = list.querySelectorAll('li.utmListItem');
+	var td
+
+	for (i = 0; i < li.length; i++) {
+		td = li[i].dataset.source;
+		//console.log(td);
+
+		if (td) {
+			if (td.toUpperCase().indexOf(filter) > -1) {
+				li[i].style.display = "";
+
+			} else {
+				li[i].style.display = "none"
+			}
+		}	
+	}
+}
+
+function mediumTypeFilter(value) {
+	var type = value;
+	//console.log(type) 
+	var input = document.getElementById('mediumTypeFilter');
+	var filter = input.value.toUpperCase();
+	var list = document.getElementById('generateUTM');
+	var li = list.querySelectorAll('li.utmListItem');
+	var td
+
+	for (i = 0; i < li.length; i++) {
+		td = li[i].dataset.medium;
+		// console.log(td);
+
+		if (td) {
+			if (td.toUpperCase().indexOf(filter) > -1) {
+				li[i].style.display = "";
+				
+			} else {
+				li[i].style.display = "none"
+			}
+		}	
+	}
+}
+
+function urlTypeFilter(value) {
+	var type = value;
+	// console.log(type) 
+	var input = document.getElementById('urlTypeFilter');
+	var filter = input.value.toUpperCase();
+	var list = document.getElementById('generateUTM');
+	var li = list.querySelectorAll('li.utmListItem');
+	var td
+
+	for (i = 0; i < li.length; i++) {
+		td = li[i].dataset.url;
+		// console.log(td);
+
+		if (td) {
+			if (td.toUpperCase().indexOf(filter) > -1) {
+				li[i].style.display = "";
+				
+			} else {
+				li[i].style.display = "none"
+			}
+		}	
+	}
+}
+
+function termTypeFilter(value) {
+	var type = value;
+	// console.log(type) 
+	var input = document.getElementById('termTypeFilter');
+	var filter = input.value.toUpperCase();
+	var list = document.getElementById('generateUTM');
+	var li = list.querySelectorAll('li.utmListItem');
+	var td
+
+	for (i = 0; i < li.length; i++) {
+		td = li[i].dataset.term;
+		// console.log(td);
+
+		if (td) {
+			if (td.toUpperCase().indexOf(filter) > -1) {
+				li[i].style.display = "";
+				
+			} else {
+				li[i].style.display = "none"
+			}
+		}	
+	}
+}
+
+function contentTypeFilter(value) {
+	var type = value;
+	// console.log(type) 
+	var input = document.getElementById('contentTypeFilter');
+	var filter = input.value.toUpperCase();
+	var list = document.getElementById('generateUTM');
+	var li = list.querySelectorAll('li.utmListItem');
+	var td
+
+	for (i = 0; i < li.length; i++) {
+		td = li[i].dataset.content;
+		// console.log(td);
+
+		if (td) {
+			if (td.toUpperCase().indexOf(filter) > -1) {
+				li[i].style.display = "";
+				
+			} else {
+				li[i].style.display = "none"
+			}
+		}	
+	}
+}
+
+document.getElementById('openclose').addEventListener("click", function() {
+	var filter = document.getElementById('filter');
+	filter.classList.toggle('openclosefilter');
+
+	var icon = document.getElementById('closeicon');
+	//console.log(icon.innerHTML)
+
+	if (icon.innerHTML == '<i class="fa fa-navicon"></i>') {
+		//console.log('hello icon');
+		icon.innerHTML = '<i class="fa fa-close"></i>';
+
+	} else {
+		icon.innerHTML = '<i class="fa fa-navicon"></i>';
+	}
+
+});
+
+	document.getElementById('toggle').addEventListener('click', function() {
+	document.getElementById('buildermenu').style.display = 'none';
+		document.getElementById('launchbuilder').style.display = 'block';
+	});
+
+	document.getElementById('buildnewutm').addEventListener('click', function() {
+		document.getElementById('buildermenu').style.display = 'block';
+		document.getElementById('launchbuilder').style.display = 'none';
+	});
+
+	function clearFilter () {
+		//document.querySelectorAll('input.typeFilter')
+		document.getElementById("urlTypeFilter").value = "";
+		document.getElementById("sourceTypeFilter").value = ""
+		document.getElementById("mediumTypeFilter").value = ""
+		document.getElementById("campaignTypeFilter").value = "";
+
+		betterTypeFilter()
+		urlTypeFilter()
+		sourceTypeFilter()
+		mediumTypeFilter()
+	}
+
+
+function checkDuplicate() {
+		
+		var url = document.getElementById('url').value;
+		//console.log(escape(url));
+		var source = escape(document.getElementById('utmsource').value);
+		//console.log(source);
+		var medium = escape(document.getElementById('utmmedium').value);
+		//console.log(medium);
+		var campaign = escape(document.getElementById('utmcampaign').value);
+		//console.log(campaign);
+		var term = escape(document.getElementById('utmterm').value);
+		//console.log(term);
+		var content = escape(document.getElementById('utmcontent').value);
+	//console.log(content);
+	//var value = document.getElementById('item').value;
+	//if(value) {
+	
+	switch (true) {
+		//everything is filled in
+		case term.length !== 0 && content.length !== 0:
+
+			var utmName = url + "?utm_source=" + source + "&utm_medium=" + medium + "&utm_campaign=" + campaign + "&utm_term=" + term + "&utm_content=" + content;
+
+			break;
+			//term is filled in. content is not filled in.
+		case term.length !== 0 && content.length === 0:	
+			var utmName = url + "?utm_source=" + source + "&utm_medium=" + medium + "&utm_campaign=" + campaign + "&utm_term=" + term;
+			break;	
+			//term is not filled in. content is filled in
+		case term.length === 0 && content.length !== 0:	
+			var utmName = url + "?utm_source=" + source + "&utm_medium=" + medium + "&utm_campaign=" + campaign + "&utm_content=" + content;
+			break;
+			//content en term are both empty
+		case term.length === 0 && content.length === 0:		
+			var utmName = url + "?utm_source=" + source + "&utm_medium=" + medium + "&utm_campaign=" + campaign;
+			break;
+	}
+
+
+	var filter = utmName.toUpperCase();
+	var list = document.getElementById('generateUTM');
+	var li = list.querySelectorAll('li.utmListItem');
+	var button = document.getElementById('utmbutton')
+
+		for (i = 0; i < li.length; i++) {
+		td = li[i].innerText;
+		// console.log(td);
+
+		if (td) {
+			if (td.toUpperCase().indexOf(filter) > -1) {
+				// console.log('it already exists')
+				button.style.background = '#d14836';
+				button.innerText = "Build duplicate UTM"
+
+			} 
+			else {
+				// console.log('it does not exists')
+				button.style.background = '#62AD61';
+				button.innerText = "Build UTM"
+			}
+		}	
+
+
+	}
+}
+
+function updateCounter() {
+var counter = document.getElementById('counter');
+
+	counter.innerText = data.utmList.length;
+	
+
+}
+
+//get segment code for analytics
+var segmentCode = 'sessions::condition::ga:medium==' + analyticsMedium;
+
+</script>
+
+
+<script>
+
+function convertToCSV(objArray) {
+    var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+    var str = '';
+
+    for (var i = 0; i < array.length; i++) {
+        var line = '';
+        for (var index in array[i]) {
+            if (line != '') line += ','
+
+            line += array[i][index];
+        }
+
+        str += line + '\r\n';
+    }
+
+    return str;
+}
+
+function exportCSVFile(headers, items, fileTitle) {
+
+    if (headers) {
+        items.unshift(headers);
+    }
+
+    // Convert Object to JSON
+    var jsonObject = JSON.stringify(data.utmList);
+
+    var csv = this.convertToCSV(jsonObject);
+
+    var exportedFileName = fileTitle + '.csv' || 'export.csv';
+
+    var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    if (navigator.msSaveBlob) { // IE 10+
+        navigator.msSaveBlob(blob, exportedFileName);
+    } else {
+        var link = document.createElement("a");
+        if (link.download !== undefined) { // feature detection
+            // Browsers that support HTML5 download attribute
+            var url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", exportedFileName);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    }
+}
+
+var headers = {
+    fullUTM: 'fullUTM',
+    url: "url",
+    source: "source",
+    medium: "medium",
+    campaign: "campaign",
+    term: "term",
+    content: "content"
+};
+
+// itemsNotFormatted = [
+//     {
+//         model: 'Samsung S7',
+//         chargers: '55',
+//         cases: '56',
+//         earphones: '57',
+//         scratched: '2'
+//     },
+//     {
+//         model: 'Pixel XL',
+//         chargers: '77',
+//         cases: '78',
+//         earphones: '79',
+//         scratched: '4'
+//     },
+//     {
+//         model: 'iPhone 7',
+//         chargers: '88',
+//         cases: '89',
+//         earphones: '90',
+//         scratched: '6'
+//     }
+// ];
+
+var itemsFormatted = [];
+
+// format the data
+data.utmList.forEach((item) => {
+    itemsFormatted.push({
+        fullUTM: item.fullUTM.replace(/,/g, ''), // remove commas to avoid errors,
+        url: item.url,
+        source: item.source,
+        medium: item.medium,
+        campaign: item.campaign,
+        term: item.term,
+        content: item.content
+    });
+});
+
+var fileTitle = 'UTM list'; // or 'my-unique-title'
+
+var downloadButton = document.getElementById('downloadUTM');
+
+downloadButton.addEventListener('click', function() {
+	exportCSVFile(headers, itemsFormatted, fileTitle)
+});
+
+//exportCSVFile(headers, itemsFormatted, fileTitle); // call the exportCSVFile() function to process the JSON and trigger the download
+
+</script>
+
+
+</html>
